@@ -7,9 +7,11 @@
 int eliminate(Matrix *mat, Matrix *b)
 {
 	int wiersze = mat->r;
-	int kolumny = mat->c + b->c;
+	int kolumny = mat->c + 1;
 
-	double macierz[wiersze][kolumny];
+	double** macierz = malloc(sizeof(*macierz) * wiersze);
+	for(int i = 0; i < kolumny; i++) macierz[i] = malloc(sizeof(**macierz) * kolumny);
+
 
 	for(int w = 0; w < wiersze; w++)
 	{
@@ -25,6 +27,8 @@ int eliminate(Matrix *mat, Matrix *b)
 
 	for(int i = 0; i < wiersze - 1; i++)
 	{
+		Selekcja(macierz, wiersze, kolumny, i);
+
 		double A = macierz[i][i];
 		if(A == 0) return 1;
 
@@ -58,3 +62,28 @@ int eliminate(Matrix *mat, Matrix *b)
 	return 0;
 }
 
+void Selekcja(double** macierz, int wiersze, int kolumny, int diagonal)
+{
+	int IndexOfMax = diagonal;
+
+	double Max = macierz[diagonal][diagonal];
+
+	for (int i = diagonal; i < wiersze; i++)
+	{
+		if(Max < abs(macierz[i][diagonal]))
+		{
+			Max = abs(macierz[i][diagonal]);
+			IndexOfMax = i;
+		}
+	}
+
+	if(IndexOfMax == diagonal) return;
+
+	double TmpWiersz[kolumny];
+
+	for(int i = 0; i < kolumny; i++) {TmpWiersz[i] = macierz[diagonal][i];}
+
+	for(int i = 0; i < kolumny; i++) {macierz[diagonal][i] = macierz[IndexOfMax][i];}
+
+	for(int i = 0; i < kolumny; i++) {macierz[IndexOfMax][i] = TmpWiersz[i];}
+}
