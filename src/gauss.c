@@ -49,7 +49,7 @@ int eliminate(Matrix *mat, Matrix *b)
 		{
 			if(k + 1 == kolumny)
 			{
-				b->data[w][1] = macierz[w][k];
+				b->data[w][0] = macierz[w][k];
 			}
 			else mat->data[w][k] = macierz[w][k];
 		}
